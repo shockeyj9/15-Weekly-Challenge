@@ -15,7 +15,7 @@ module.exports = {
             const user = await User.findOne(
                 {_id: req.params.userId}
             )
-            .populate("users")
+            .populate("thoughts")
             .populate("friends")
 
             if (!user){
