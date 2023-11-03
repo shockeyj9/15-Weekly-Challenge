@@ -1,11 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const reactionSchema = new Schema(
-{
-    reactionId:{
-        type: Schema.Type.ObjectID,
-        default: new Schema.Type.ObjectID
-    },
+{   
+    reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId(),
+      },
     reactionBody: {
         type: String,
         required: true,
@@ -27,12 +27,7 @@ const reactionSchema = new Schema(
         default: Date.now,
         // TODO: ADD GETTER METHOD TO FORMAT THE TIMESTAMP ON QUERY
     },
-},{
-    toJSON: {
-        virtuals: true,
-        },  
-}
-)
+})
 
 const thoughtSchema = new Schema({
         thoughtText: {
@@ -40,7 +35,7 @@ const thoughtSchema = new Schema({
             required: true,
             validate: {
                 validator: async function (){
-                    if (!(1<=this.thoughtText.length<=280)){
+                    if (this.thoughtText.length<=280){
                         return true;
                     }
                 },
@@ -65,5 +60,5 @@ const thoughtSchema = new Schema({
 )
 
 
-const Thought = model('user', thoughtSchema);
+const Thought = model('thought', thoughtSchema);
 module.exports = Thought;
