@@ -1,4 +1,4 @@
-const {User, Thought} = require('../models'); 
+const {User, user} = require('../models'); 
 
 module.exports = {
     async getUsers(req,res){
@@ -15,7 +15,7 @@ module.exports = {
             const user = await User.findOne(
                 {_id: req.params.userId}
             )
-            .populate("thoughts")
+            .populate("users")
             .populate("friends")
 
             if (!user){
@@ -36,4 +36,20 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  async updateUser(req,res){
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body }
+            // { runValidators: true, new: true }
+          );
+          if (!user) {
+            res.status(404).json({ message: 'No user with this id!' });
+          }
+
+          res.json(user);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+},
 }
