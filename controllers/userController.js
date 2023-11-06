@@ -36,6 +36,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  
   async updateUser(req,res){
     try {
         const user = await User.findOneAndUpdate(
@@ -52,6 +53,22 @@ module.exports = {
         res.status(500).json(error);
     }
 },
+async addFriend(req,res){
+  try {
+      const user = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $push: {friends: [req.params.friendId]} },
+          { runValidators: true, new: true }
+        );
+        if (!user) {
+          res.status(404).json({ message: 'No user with this id!' });
+        }
+
+        res.json(user);
+  } catch (error) {
+      res.status(500).json(error);
+  }
+},
 async deleteUser(req,res){
     try {
         const user = await User.findOneAndDelete({ _id: req.params.userId });
@@ -64,5 +81,20 @@ async deleteUser(req,res){
       } catch (error) {
         res.status(500).json(error);
       }
+},
+async deleteFriend(req,res){
+  try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        {$pull: {friends: req.params.friendId}});
+
+      if (!user) {
+        res.status(404).json({ message: 'No user with that ID' });
+      }
+
+      res.json({ message: 'friend deleted!' });
+    } catch (error) {
+      res.status(500).json(error);
+    }
 }
 }
