@@ -57,7 +57,7 @@ async addFriend(req,res){
   try {
       const user = await User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $push: {friends: [req.params.friendId]} },
+          { $push: {friends: req.params.friendId} },
           { runValidators: true, new: true }
         );
         if (!user) {
