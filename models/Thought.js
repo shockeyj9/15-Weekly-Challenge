@@ -1,4 +1,7 @@
 const { Schema, model, Types } = require('mongoose');
+const dayjs = require('dayjs');
+const advancedFormat = require('dayjs/plugin/advancedFormat');
+dayjs.extend(advancedFormat);
 
 const reactionSchema = new Schema(
 {   
@@ -25,8 +28,12 @@ const reactionSchema = new Schema(
     createdAt: {
         type: Date,
         default: Date.now,
-        // TODO: ADD GETTER METHOD TO FORMAT THE TIMESTAMP ON QUERY
+        get: (date)=> `${dayjs(date).format('MMM Do, YYYY [at] hh:mm A')}`
     },
+},{
+    toJSON: {
+        getters: true,
+        },
 })
 
 const thoughtSchema = new Schema({
@@ -45,7 +52,7 @@ const thoughtSchema = new Schema({
         createdAt: {
             type: Date,
             default: Date.now,
-            // TODO: ADD GETTER METHOD TO FORMAT THE TIMESTAMP ON QUERY
+            get: (date)=> `${dayjs(date).format('MMM Do, YYYY [at] hh:mm A')}`
         },
         username: {
             type: String,
@@ -54,6 +61,7 @@ const thoughtSchema = new Schema({
         reactions: [reactionSchema]
     },{
         toJSON: {
+            getters: true,
             virtuals: true,
             },
     }
