@@ -23,7 +23,7 @@ const userSchema = new Schema({
         validate: {
             validator: async function (){
                 const result = new RegExp(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/).test(this.email);
-                return Boolean(!result);
+                return Boolean(result);
             },
             message: props => "That email entered is not valid. Please enter a valid email."
         }
